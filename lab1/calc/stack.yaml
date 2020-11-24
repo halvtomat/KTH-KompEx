@@ -38,7 +38,6 @@ extra-deps:
 # - acme-missiles-0.3
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
-#- regex-base-0.93.2@sha256:6d4307e6732c9b3c01fa6b7c6e2c2e578dc844804b9de73dc55832de4b1d7a36,2035
 # extra-deps: []
 
 # Override default flag values for local packages and extra-deps
