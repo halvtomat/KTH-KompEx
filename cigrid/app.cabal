@@ -10,6 +10,7 @@ executable cigrid
   other-modules: Tokenizer
                , Parser
                , PrettyPrinter
+               , InstructionGenerator
   default-language: Haskell2010
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -funbox-strict-fields
   build-depends: base

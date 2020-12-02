@@ -4,16 +4,16 @@ module Main where
 
 import System.Exit ( exitWith, ExitCode(ExitFailure, ExitSuccess))
 import System.IO
-import System.Environment
 import Options.Applicative
-import Data.Semigroup((<>))
 import Control.Exception ( catch, PatternMatchFail(PatternMatchFail))
 import Tokenizer
 import Parser
 import PrettyPrinter
+import InstructionGenerator
 
 data Args = Args
     { prettyprint :: Bool 
+    , asm :: Bool
     , filename :: String }
 
 args :: Parser Args
@@ -21,7 +21,11 @@ args = Args
     <$> switch
          ( long "pretty-print"
         <> short 'p'
-        <> help "Use to print pretty" )
+        <> help "Pretty-print the AST" )
+    <*> switch
+         ( long "asm"
+        <> short 'a'
+        <> help "Print the generated x86 instructions" )
     <*> argument str
          ( metavar "FILE"
         <> help "Name of file to compile" )
@@ -37,7 +41,7 @@ main :: IO()
 main = catch (compile =<< execParser opts) handler
 
 compile :: Args -> IO()
-compile (Args True f) = do
+compile (Args True False f) = do
     file <- openFile f ReadMode
     input <- hGetContents file
     let tok = tokenize input
@@ -45,13 +49,25 @@ compile (Args True f) = do
     let prettyPrint = prettyPrintProgram program
     putStrLn prettyPrint
     exitWith (ExitSuccess)
-
-compile (Args False f) = do
+compile (Args False False f) = do
     file <- openFile f ReadMode
     input <- hGetContents file
     let tok = tokenize input
     let program = parseMain tok
+    let _ = genInstr program
     exitWith (ExitSuccess)
+compile (Args False True f) = do
+    file <- openFile f ReadMode
+    input <- hGetContents file
+    let tok = tokenize input
+    let program = parseMain tok
+    let instr = genInstr program
+    putStrLn instr
+    exitWith (ExitSuccess)
+compile (Args True True _) = do
+    putStrLn "--asm and --pretty-print cant be used together!"
+    exitWith(ExitSuccess)
+
 
 handler :: PatternMatchFail -> IO ()
 handler (PatternMatchFail _) = exitWith (ExitFailure 1)
