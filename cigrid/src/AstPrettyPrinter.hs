@@ -1,4 +1,4 @@
-module PrettyPrinter where 
+module AstPrettyPrinter where 
 
 import Parser
 

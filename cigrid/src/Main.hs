@@ -8,7 +8,8 @@ import Options.Applicative
 import Control.Exception ( catch, PatternMatchFail(PatternMatchFail))
 import Tokenizer
 import Parser
-import PrettyPrinter
+import AstPrettyPrinter
+import AsmPrettyPrinter
 import InstructionGenerator
 
 data Args = Args
@@ -62,10 +63,11 @@ compile (Args False True f) = do
     let tok = tokenize input
     let program = parseMain tok
     let instr = genInstr program
-    putStrLn instr
+    let prettyPrint = prettyPrintAsm instr
+    putStrLn prettyPrint
     exitWith (ExitSuccess)
 compile (Args True True _) = do
-    putStrLn "--asm and --pretty-print cant be used together!"
+    putStrLn "Invalid options"
     exitWith(ExitSuccess)
 
 
