@@ -6,7 +6,20 @@ Command for compiling to objectfile with maximum optimization:
 
     gcc -c -O3 factorial.c 
 
+Command for compiling to objectfile without optimization:
+
+    gcc -c factorial.c
+
 ### 1b
+**PRIVATE COMPUTER**
+
+**Optimized:** *2104* bytes.
+
+**Unoptimized:** *2168* bytes.
+
+
+**VAGRANT**
+
 **Optimized:** *2944* bytes.
 
 **Unoptimized:** *2016* bytes.
@@ -66,7 +79,9 @@ Mark-and-sweep garbage collecting will use the following steps to remove garbage
 1. Use DFS to find all reachable memory blocks and mark them.
     1. Mark the third block (pointed to by *c*).
     1. Mark the fourth block (pointed to by the third block).
-2. Iterate through the memory blocks and add the ones not marked (The first and second blocks) to the freelist.
+1. Iterate through the memory blocks and add the ones not marked (The first and second blocks) to the freelist.
+
+Adding a block to the freelist is simply making the freelist-pointer point to the block and then making that block point to the next free block etc. It is essentially just a linked list of unused memory blocks.
 
 ### 2c
 Same as above but this time no blocks are reachable which means no blocks are marked and all memory is freed.
@@ -93,5 +108,8 @@ Incremental collectors instead have the benefit of spreading out the work over a
 
 ### 3c
 The interference graph is used to get an understanding of which program variables *interfere* with each other in some way, interfere in this case is if they require separete physical registers anywhere in the program. 
+
+The interference graph is then used the same way a map would be used in a graph coloring problem (the problem where two neighbouring countries can't have the same color on a map). A graph coloring heuristic is used to determine a color for each node in the graph, where a color in this example represents a physical register. If there aren't enough physical registers, some node(s) will be marked as potantial spill and later potentially be spilled.
+![Graph Coloring Example](images/graph_coloring.png)
 
 In the case above we have three different program variables which all interfere with each other somewhere, this means that the compiler must assign three physical registers for the program. If instead *n* and *i* didn't interfere, two physical registers would be sufficient (one for *x* and one for *n* **and** *i*).
