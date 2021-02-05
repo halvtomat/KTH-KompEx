@@ -11,18 +11,11 @@ Command for compiling to objectfile without optimization:
     gcc -c factorial.c
 
 ### 1b
-**PRIVATE COMPUTER**
-
-**Optimized:** *2104* bytes.
-
-**Unoptimized:** *2168* bytes.
-
-
 **VAGRANT**
 
-**Optimized:** *2944* bytes.
+**Optimized:** *827* bytes.
 
-**Unoptimized:** *2016* bytes.
+**Unoptimized:** *216* bytes.
 
 ### 1c
 Data section is *8* bytes.
